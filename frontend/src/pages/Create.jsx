@@ -44,6 +44,12 @@ function Create() {
               type="number"
               className="mb-3"
             />
+            <Select placeholder="Unit" className="mb-3">
+              <option value="Box">Box</option>
+              <option value="Pcs">Pcs</option>
+              <option value="Pack">Pack</option>
+              <option value="Pasang">Pasang</option>
+            </Select>
             <Button colorScheme="teal" variant="solid">
               Submit
             </Button>
