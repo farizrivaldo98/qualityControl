@@ -13,6 +13,7 @@ import {
   Table,
   Thead,
   Tbody,
+  Checkbox,
   Tr,
   Th,
   Td,
@@ -97,16 +98,16 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 function Edit() {
   const [inputTest, setInputText] = useState("");
   const [dropDownTest, setDropDown] = useState(0);
-  const [lockerSelect, setLockerSelect] = useState();
+  const [lockerSelect, setLockerSelect] = useState(null);
+  const [qtySelect, setQTYSelect] = useState(null);
   const [getMayData, setGetMyData] = useState([]);
+  const [backupQTY, setBeckupQTY] = useState();
+  const [backupLOCKER, setBackupLOCKER] = useState();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let response = await axios.get("http://localhost:8002/qc/getMyData");
-      setGetMyData(response.data);
-    };
-    fetchData();
-  }, []);
+  const fetchData = async () => {
+    let response = await axios.get("http://localhost:8002/qc/getMyData");
+    setGetMyData(response.data);
+  };
 
   const inputHandeler = (e) => {
     setInputText(e.target.value.toUpperCase());
@@ -116,17 +117,72 @@ function Edit() {
     setDropDown(e.target.value);
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const selectHendeler = (e) => {
-    setLockerSelect(e.target.value);
+    setLockerSelect(Number(e.target.value));
   };
-  const editHendeler = (id) => {
-    alert(`${id} Sudah Edit`);
+
+  const updateInputHandeler = (e) => {
+    setQTYSelect(e.target.value);
   };
-  const updateHendeler = (id) => {
-    alert(`${id} Sudah Update`);
+  const editHendeler = async (id, qty, locker) => {
+    setBeckupQTY(Number(qty));
+    setBackupLOCKER(Number(locker));
+    setLockerSelect(null);
+    setQTYSelect(null);
+    let response = await axios.patch(`http://localhost:8002/qc/edit/${id}`);
+    fetchData();
   };
-  const deleteHendeler = (id) => {
-    alert(`${id} Sudah Delete`);
+  const updateHendeler = async (id) => {
+    if (lockerSelect == null) {
+      var locker = backupLOCKER;
+    } else {
+      var locker = lockerSelect;
+    }
+    if (qtySelect == null) {
+      var data_qty = backupQTY;
+    } else {
+      data_qty = qtySelect;
+    }
+    console.log(locker, data_qty);
+    let dataUser = { no_locker: locker, no_qty: data_qty };
+    let response = await axios.patch(
+      `http://localhost:8002/qc/update/${id}`,
+      dataUser
+    );
+    if (response) {
+      alert(response.data.message);
+    }
+    fetchData();
+  };
+  const deleteHendeler = async (id) => {
+    // Menampilkan konfirmasi dialog
+    const confirmation = window.confirm(
+      "Apakah Anda yakin ingin menghapus Item ini ?"
+    );
+
+    if (confirmation) {
+      try {
+        // Jika pengguna menekan "OK" di konfirmasi dialog
+        const response = await axios.delete(
+          `http://localhost:8002/qc/delete/${id}`
+        );
+
+        if (response) {
+          alert(response.data.message);
+        }
+        fetchData();
+      } catch (error) {
+        // Tangani kesalahan jika ada
+        console.error("Terjadi kesalahan saat menghapus pengguna:", error);
+      }
+    } else {
+      // Jika pengguna menekan "Batal" di konfirmasi dialog
+      alert("Item tidak dihapus.");
+    }
   };
 
   const renderItemList = () => {
@@ -135,7 +191,7 @@ function Edit() {
         return el;
       }
       if (inputTest == "" && !dropDownTest == 0) {
-        return el.no_locker == dropDownTest;
+        return el.no_locker == dropDownTest || el.no_locker == null;
       }
       if (!inputTest == "" && dropDownTest == 0) {
         return el.item_name.includes(inputTest);
@@ -151,12 +207,23 @@ function Edit() {
         <Td>{item.item_name}</Td>
         <Td>{item.no_catalog}</Td>
         <Td>{item.brand}</Td>
-        <Td>{item.qty}</Td>
+        <Td>
+          {item.no_locker === null ? (
+            <Input
+              placeholder={backupQTY}
+              size="md"
+              type="text"
+              onChange={updateInputHandeler}
+            />
+          ) : (
+            item.qty
+          )}
+        </Td>
         <Td>{item.unit}</Td>
         {/* <Td>{item.no_locker}</Td> */}
         <Td>
           {item.no_locker === null ? (
-            <Select onChange={selectHendeler}>
+            <Select placeholder={backupLOCKER} onChange={selectHendeler}>
               <option value={1}>1</option>
               <option value={2}>2</option>
               <option value={3}>3</option>
@@ -191,26 +258,31 @@ function Edit() {
           {item.no_locker === null ? (
             <Button
               colorScheme="blue"
+              className="mr-2"
               onClick={() => {
-                updateHendeler(item.id);
+                updateHendeler(item.id, item.qty, item.no_locker);
               }}
             >
               Update
             </Button>
           ) : (
-            <Button
-              className="mr-2"
-              colorScheme="green"
-              onClick={() => {
-                editHendeler(item.id);
-              }}
-            >
-              Edit
-            </Button>
+            <>
+              <Button
+                className="mr-2"
+                colorScheme="green"
+                onClick={() => {
+                  editHendeler(item.id, item.qty, item.no_locker);
+                }}
+              >
+                Edit
+              </Button>
+            </>
           )}
-          <Button colorScheme="red" onClick={() => deleteHendeler(item.id)}>
-            Delet
-          </Button>
+          <>
+            <Button colorScheme="red" onClick={() => deleteHendeler(item.id)}>
+              Delete
+            </Button>
+          </>
         </Td>
       </Tr>
     ));
@@ -235,7 +307,7 @@ function Edit() {
               </div>
 
               <div className="flex-grow mr-2">
-                <Select onChange={dropDownHendeler}>
+                <Select onChange={dropDownHendeler} placeholder="Locker Number">
                   <option value={1}>1</option>
                   <option value={2}>2</option>
                   <option value={3}>3</option>
