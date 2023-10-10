@@ -98,7 +98,7 @@ function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let response = await axios.get("http://localhost:8002/qc/getMyData");
+      let response = await axios.get("http://10.126.15.135:8002/qc/getMyData");
       setGetMyData(response.data);
     };
     fetchData();
@@ -150,7 +150,8 @@ function Home() {
         <div>
           <SimpleGrid
             spacing={4}
-            templateColumns="repeat(auto-fill, minmax(800px, 2fr))"
+            templateColumns="repeat(auto-fill, minmax(800px))"
+            // templateColumns="repeat(auto-fill, minmax(800px, 2fr))"
           >
             <Card>
               <CardHeader>
@@ -175,7 +176,7 @@ function Home() {
               </CardBody>
             </Card>
             {/* =============================================================================== */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <Heading size="md"> Log Gate</Heading>
               </CardHeader>
@@ -195,7 +196,7 @@ function Home() {
                   <Tbody>{renderItemList()}</Tbody>
                 </Table>
               </CardBody>
-            </Card>
+            </Card> */}
           </SimpleGrid>
         </div>
       </div>
