@@ -7,5 +7,6 @@ routers.post("/create", databaseControllers.createMyData);
 routers.patch("/edit/:id", databaseControllers.editData);
 routers.patch("/update/:id", databaseControllers.updateData);
 routers.delete("/delete/:id", databaseControllers.deleteData);
+routers.patch("/pickup/:id", databaseControllers.pickupData);
 
 module.exports = routers;

@@ -98,7 +98,7 @@ function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let response = await axios.get("http://10.126.15.135:8002/qc/getMyData");
+      let response = await axios.get("http://10.126.10.42:8002/qc/getMyData");
       setGetMyData(response.data);
     };
     fetchData();

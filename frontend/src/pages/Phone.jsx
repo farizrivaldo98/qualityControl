@@ -24,18 +24,58 @@ function Phone() {
   const [selectQTY, setSelectQTY] = useState();
   const [selectUnit, setSelectUnit] = useState();
   const [selectLocker, setSelectLocker] = useState();
+  const [initialData, setInitialData] = useState("");
+  const [qualityData, setQualityData] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let response = await axios.get("http://10.126.15.135:8002/qc/getMyData");
-      setGetMyData(response.data);
-    };
-    fetchData();
-  }, []);
+  const fetchData = async () => {
+    let response = await axios.get("http://10.126.10.42:8002/qc/getMyData");
+    setGetMyData(response.data);
+  };
 
   const inputHandler = (e) => {
     setInputText(e.target.value.toUpperCase());
   };
+
+  const initialSelectHendeler = (e) => {
+    setInitialData(e.target.value);
+  };
+
+  const choseQualityHendeler = (e) => {
+    setQualityData(e.target.value);
+  };
+
+  const submitButonHendeler = async (e) => {
+    var transaction = { no_qty: selectQTY[0] - Number(qualityData) };
+    var id = seletIdItem;
+    let response = await axios.patch(
+      `http://10.126.10.42:8002/qc/pickup/${id}`,
+      transaction
+    );
+    if (response) {
+      if (transaction.no_qty < 3) {
+        // Redirect ke link WhatsApp jika transaksi kurang dari 3
+        alert(
+          `Akan menghubungi Whatsapp Admin karna barang ${selectName} mulai habis`
+        );
+
+        window.location.href = `https://api.whatsapp.com/send?phone=6289626340073&text=Minta%20untuk%20pembelian%20barang%20${selectName}%20karena%20barang%20tinggal%20${transaction.no_qty}%20di%20lemari%20nomor%20${selectLocker}%0A%0ATrimakasih%20:)`;
+        setTimeout(function () {
+          window.location.reload();
+        }, 1000);
+        return;
+      } else {
+        // Jika transaksi lebih besar atau sama dengan 3, tampilkan alert
+        alert(response.data.message);
+        window.location.reload();
+      }
+      window.location.reload();
+    }
+    fetchData();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const selectItemHendeler = (id) => {
     setSelectidItem(id);
@@ -77,6 +117,8 @@ function Phone() {
         return el.item_name.includes(inputText);
       }
     });
+    itemList.sort((a, b) => a.no_locker - b.no_locker);
+
     return itemList.map((item, index) => (
       <Tr key={index}>
         <Td
@@ -193,19 +235,7 @@ function Phone() {
 
         <div className="flex flex-col px-auto ">
           <Card className="p-3">
-            <Select placeholder="Initial">
-              <option value="ABC">ABC</option>
-              <option value="DEF">DEF</option>
-              <option value="SAF">SAF</option>
-              <option value="GHI">GHI</option>
-              <option value="JKL">JKL</option>
-              <option value="MNO">MNO</option>
-              <option value="PQR">PQR</option>
-              <option value="STU">STU</option>
-              <option value="VWX">VWX</option>
-              <option value="YZA">YZA</option>
-            </Select>
-            <div className="mt-2">
+            <div className="mt-2 ml-1">
               <h1 style={{ textAlign: "left", margin: "10px 0" }}>
                 Item Name = {selectName}
               </h1>
@@ -219,8 +249,18 @@ function Phone() {
                 Locker Item = {selectLocker}
               </h1>
             </div>
+            <Input
+              placeholder="Initial"
+              size="xs"
+              type="text"
+              className="p-2"
+              onChange={initialSelectHendeler}
+            />
             <div className="mt-2">
-              <Select placeholder="Select Quality">
+              <Select
+                placeholder="Select Quality"
+                onChange={choseQualityHendeler}
+              >
                 {Array.from({ length: Number(selectQTY) }).map((_, index) => (
                   <option key={index} value={index + 1}>
                     {index + 1} {selectUnit}
@@ -229,7 +269,18 @@ function Phone() {
               </Select>
             </div>
             <div className="mt-3 ">
-              <Button colorScheme="green">Pick Up Item</Button>
+              {initialData && qualityData ? (
+                <Button
+                  colorScheme="green"
+                  onClick={() => {
+                    submitButonHendeler();
+                  }}
+                >
+                  Pick Up Item
+                </Button>
+              ) : (
+                <div></div>
+              )}
             </div>
           </Card>
         </div>

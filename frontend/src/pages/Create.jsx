@@ -55,7 +55,7 @@ function Create() {
       ket: inputKeterangan,
     };
     let response = await axios.post(
-      "http://10.126.15.135:8002/qc/create",
+      "http://10.126.10.42:8002/qc/create",
       tempData
     );
     alert(response.request.statusText);
