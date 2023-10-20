@@ -28,9 +28,14 @@ function Phone() {
   const [qualityData, setQualityData] = useState(null);
 
   const fetchData = async () => {
-    let response = await axios.get("http://10.126.10.42:8002/qc/getMyData");
+    let response = await axios.get("http://10.126.15.141:8002/qc/getMyData");
     setGetMyData(response.data);
   };
+
+  useEffect(() => {
+    
+    fetchData();
+  }, []);
 
   const inputHandler = (e) => {
     setInputText(e.target.value.toUpperCase());
@@ -48,7 +53,7 @@ function Phone() {
     var transaction = { no_qty: selectQTY[0] - Number(qualityData) };
     var id = seletIdItem;
     let response = await axios.patch(
-      `http://10.126.10.42:8002/qc/pickup/${id}`,
+      `http://10.126.15.141:8002/qc/pickup/${id}`,
       transaction
     );
     if (response) {

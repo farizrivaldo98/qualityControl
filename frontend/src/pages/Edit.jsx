@@ -106,7 +106,7 @@ function Edit() {
   const [editEnable, setEditEnable] = useState(true);
 
   const fetchData = async () => {
-    let response = await axios.get("http://10.126.10.42:8002/qc/getMyData");
+    let response = await axios.get("http://10.126.15.141:8002/qc/getMyData");
     setGetMyData(response.data);
   };
 
@@ -130,19 +130,12 @@ function Edit() {
     setQTYSelect(e.target.value);
   };
   const editHendeler = async (id, qty, locker) => {
-    if (editEnable == false) {
-      alert("Tidak bisa melakukan Multiple Edit");
-    } else {
-      setEditEnable(false);
-      setBeckupQTY(Number(qty));
-      setBackupLOCKER(Number(locker));
-      setLockerSelect(null);
-      setQTYSelect(null);
-      let response = await axios.patch(
-        `http://10.126.10.42:8002/qc/edit/${id}`
-      );
-      fetchData();
-    }
+    setBeckupQTY(Number(qty));
+    setBackupLOCKER(Number(locker));
+    setLockerSelect(null);
+    setQTYSelect(null);
+    let response = await axios.patch(`http://10.126.15.141:8002/qc/edit/${id}`);
+    fetchData();
   };
 
   const updateHendeler = async (id) => {
@@ -160,7 +153,7 @@ function Edit() {
     console.log(locker, data_qty);
     let dataUser = { no_locker: locker, no_qty: data_qty };
     let response = await axios.patch(
-      `http://10.126.10.42:8002/qc/update/${id}`,
+      `http://10.126.15.141:8002/qc/update/${id}`,
       dataUser
     );
     if (response) {
@@ -178,7 +171,7 @@ function Edit() {
       try {
         // Jika pengguna menekan "OK" di konfirmasi dialog
         const response = await axios.delete(
-          `http://10.126.10.42:8002/qc/delete/${id}`
+          `http://10.126.15.141:8002/qc/delete/${id}`
         );
 
         if (response) {
