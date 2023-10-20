@@ -13,6 +13,7 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import DescriptionIcon from "@mui/icons-material/Description";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AdfScannerIcon from "@mui/icons-material/AdfScanner";
+import AddToHomeScreenIcon from "@mui/icons-material/AddToHomeScreen";
 function Navbar() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
@@ -95,6 +96,17 @@ function Navbar() {
                 >
                   <DescriptionIcon className="w-6 h-6 text-gray-100" />
                   {isHovered && <span className="text-gray-100">Edit</span>}
+                </button>
+              </li>
+              <li className="rounded-sm">
+                <button
+                  onClick={() => {
+                    navigate(`/Phone`);
+                  }}
+                  className="flex items-center p-2 space-x-3 rounded-md"
+                >
+                  <AddToHomeScreenIcon className="w-6 h-6 text-gray-100" />
+                  {isHovered && <span className="text-gray-100">Phone</span>}
                 </button>
               </li>
 
