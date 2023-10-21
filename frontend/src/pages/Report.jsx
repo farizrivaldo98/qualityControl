@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -25,8 +25,10 @@ import {
   Input,
   IconButton,
 } from "@chakra-ui/react";
+import  axios  from "axios";
 import CanvasJSReact from "../canvasjs.react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -104,69 +106,26 @@ const data = [
   },
 ];
 
-// const options = {
-//   theme: "dark2",
-//   backgroundColor: "#1e1e1e",
-//   // title: {
-//   //   text: "Truck per Day",
-//   //   fontColor: "#007acc",
-//   // },
-//   // subtitles: [
-//   //   {
-//   //     text: "total truck hour",
-//   //     fontColor: "#dadcde",
-//   //   },
-//   // ],
-//   axisY: {
-//     prefix: "",
-//   },
-//   toolTip: {
-//     shared: true,
-//   },
-//   data: [
-//     {
-//       type: "spline",
-//       name: "Gate 1",
-//       fontColor: "#dadcde",
-//       showInLegend: true,
-//       xValueFormatString: "",
-//       yValueFormatString: "",
-//       dataPoints: [
-//         { label: "08.00", y: 10 },
-//         { label: "09.00", y: 15 },
-//         { label: "10.00", y: 25 },
-//         { label: "11.00", y: 30 },
-//         { label: "12.00", y: 28 },
-//         { label: "13.00", y: 10 },
-//         { label: "14.00", y: 15 },
-//         { label: "15.00", y: 25 },
-//         { label: "16.00", y: 30 },
-//         { label: "17.00", y: 28 },
-//       ],
-//     },
-//     {
-//       type: "spline",
-//       name: "Gate 2",
-//       fontColor: "#dadcde",
-//       showInLegend: true,
-//       xValueFormatString: "",
-//       yValueFormatString: "",
-//       dataPoints: [
-//         { label: "08.00", y: 12 },
-//         { label: "09.00", y: 23 },
-//         { label: "10.00", y: 34 },
-//         { label: "11.00", y: 31 },
-//         { label: "12.00", y: 12 },
-//         { label: "13.00", y: 4 },
-//         { label: "14.00", y: 7 },
-//         { label: "15.00", y: 12 },
-//         { label: "16.00", y: 8 },
-//         { label: "17.00", y: 12 },
-//       ],
-//     },
-//   ],
-// };
+
+
 function Report() {
+
+ 
+  const fetchData = async () => {
+  
+  
+  
+    let response = await axios.get("http://10.126.15.141:8002/qc/gethistorian",{
+      params : {
+        start : "2023-10-20",
+        finish :" 2023-10-21"
+      }
+    });
+    
+    console.log(response.data);
+  };
+
+
   return (
     <div className="text-center pt-4 pb-2">
       <h1 className="font-extrabold text-2xl text-teal-600  mb-4">
@@ -187,7 +146,7 @@ function Report() {
               </div>
 
               <div>
-                <Button colorScheme="teal" variant="solid">
+                <Button colorScheme="teal" variant="solid" onClick={() => {fetchData()}}>
                   Submit
                 </Button>
               </div>

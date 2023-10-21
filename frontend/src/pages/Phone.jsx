@@ -26,6 +26,14 @@ function Phone() {
   const [selectLocker, setSelectLocker] = useState();
   const [initialData, setInitialData] = useState("");
   const [qualityData, setQualityData] = useState(null);
+  const [keteranganData, setKeteranganData] = useState("");
+  const [myDate, setMyDate] = useState()
+
+
+ 
+
+
+
 
   const fetchData = async () => {
     let response = await axios.get("http://10.126.15.141:8002/qc/getMyData");
@@ -36,6 +44,10 @@ function Phone() {
     
     fetchData();
   }, []);
+
+  const KeteranganHendeler = (e) => {
+    setKeteranganData(e.target.value)
+  }
 
   const inputHandler = (e) => {
     setInputText(e.target.value.toUpperCase());
@@ -49,6 +61,20 @@ function Phone() {
     setQualityData(e.target.value);
   };
 
+  const historyPickupHendeler = async() => {
+    var myData = {
+      date : myDate,
+      initial : initialData,
+      item_name : selectName[0],
+      item_locker : Number(selectLocker[0]),
+      quality : selectQTY[0],
+      quality_pickup : Number(qualityData),
+      ket : keteranganData
+    }
+    let response = await axios.post("http://10.126.15.141:8002/qc/historian",myData)
+
+  }
+
   const submitButonHendeler = async (e) => {
     var transaction = { no_qty: selectQTY[0] - Number(qualityData) };
     var id = seletIdItem;
@@ -56,6 +82,7 @@ function Phone() {
       `http://10.126.15.141:8002/qc/pickup/${id}`,
       transaction
     );
+    historyPickupHendeler()
     if (response) {
       if (transaction.no_qty < 3) {
         // Redirect ke link WhatsApp jika transaksi kurang dari 3
@@ -79,6 +106,20 @@ function Phone() {
   };
 
   useEffect(() => {
+    const now = new Date();
+    function formatDateForMySQL(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+      const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      return formattedDateTime;
+    }
+    const formattedNowForMySQL = formatDateForMySQL(now);
+    setMyDate(formattedNowForMySQL)
     fetchData();
   }, []);
 
@@ -272,6 +313,15 @@ function Phone() {
                   </option>
                 ))}
               </Select>
+            </div>
+            <div className="mt-2">
+            <Input
+              placeholder="Keterangan"
+              size="xs"
+              type="text"
+              className="p-2"
+             onChange={KeteranganHendeler}
+            />
             </div>
             <div className="mt-3 ">
               {initialData && qualityData ? (

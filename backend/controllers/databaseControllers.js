@@ -100,4 +100,27 @@ module.exports = {
       }
     });
   },
+  historyPickup: (request,response) => {
+    let{date, initial, item_name, item_locker, quality, quality_pickup,ket} = request.body
+    createQuery = `INSERT INTO quality2 VALUES (null, ${db.escape(date)},${db.escape(initial)}
+    ,${db.escape(item_name)},${db.escape(item_locker)},${db.escape(quality)},
+    ${db.escape(quality_pickup)}, ${db.escape(ket)});`
+    db.query(createQuery, (err, result) => {
+      if (err) {
+        return response.status(400).send(err.message);
+      } else {
+        let fatchquerry = "SELECT * FROM parammachine_saka.quality2;";
+        db.query(fatchquerry, (err, result) => {
+          return response.status(200).send(result);
+        });
+      }
+    });
+  },
+  getHistori : (request, response) => {
+    let{start, finish} = request.query	
+    getQuerry = `SELECT * FROM parammachine_saka.quality2 WHERE date between ${db.escape(start +' 00:00:00')} AND ${db.escape(finish + ' 23:59:59')} ;`
+    db.query(getQuerry, (err, result) => {
+      return response.status(200).send(result);
+    });
+  }
 };

@@ -8,5 +8,7 @@ routers.patch("/edit/:id", databaseControllers.editData);
 routers.patch("/update/:id", databaseControllers.updateData);
 routers.delete("/delete/:id", databaseControllers.deleteData);
 routers.patch("/pickup/:id", databaseControllers.pickupData);
+routers.post("/history", databaseControllers.historyPickup)
+routers.get("/gethistorian", databaseControllers.getHistori)
 
 module.exports = routers;
