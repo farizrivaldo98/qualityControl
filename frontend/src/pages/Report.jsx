@@ -25,10 +25,9 @@ import {
   Input,
   IconButton,
 } from "@chakra-ui/react";
-import  axios  from "axios";
+import axios from "axios";
 import CanvasJSReact from "../canvasjs.react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
-
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -106,25 +105,32 @@ const data = [
   },
 ];
 
-
-
 function Report() {
+  const [getDataHistorical, setGetDataHistorical] = useState([]);
+  const [getStartDate, setGetStartDate] = useState();
+  const [getFinishDate, setGetFinishDate] = useState();
 
- 
   const fetchData = async () => {
-  
-  
-  
-    let response = await axios.get("http://10.126.15.141:8002/qc/gethistorian",{
-      params : {
-        start : "2023-10-20",
-        finish :" 2023-10-21"
+    let response = await axios.get(
+      "http://10.126.15.141:8002/qc/gethistorian",
+      {
+        params: {
+          start: "2023-10-20",
+          finish: " 2023-10-21",
+        },
       }
-    });
-    
-    console.log(response.data);
-  };
+    );
 
+    setGetDataHistorical(response.data);
+  };
+  const startDateHendeler = (e) => {
+    setGetStartDate(e.target.value);
+    console.log(e.target.value);
+  };
+  const finishDateHendeler = (e) => {
+    setGetFinishDate(e.target.value);
+    console.log(e.target.value);
+  };
 
   return (
     <div className="text-center pt-4 pb-2">
@@ -137,16 +143,32 @@ function Report() {
             <div className="flex flex-row justify-center items-center m-2">
               <div className="flex-grow mr-2">
                 <label htmlFor="dateInput">Start Date:</label>
-                <Input id="dateInput" size="md" type="date" />
+                <Input
+                  id="dateInput"
+                  size="md"
+                  type="date"
+                  onChange={startDateHendeler}
+                />
               </div>
 
               <div className="flex-grow mr-2">
                 <label htmlFor="dateInput">End Date:</label>
-                <Input id="dateInput" size="md" type="date" />
+                <Input
+                  id="dateInput"
+                  size="md"
+                  type="date"
+                  onChange={finishDateHendeler}
+                />
               </div>
 
               <div>
-                <Button colorScheme="teal" variant="solid" onClick={() => {fetchData()}}>
+                <Button
+                  colorScheme="teal"
+                  variant="solid"
+                  onClick={() => {
+                    fetchData();
+                  }}
+                >
                   Submit
                 </Button>
               </div>
