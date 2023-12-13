@@ -183,7 +183,7 @@ function Report() {
             {/* =============================================================================== */}
             <Card>
               <CardHeader>
-                <Heading size="md"> Log Gate</Heading>
+                <Heading size="md"> Log Data by Date</Heading>
               </CardHeader>
               <CardBody style={{ maxHeight: "400px", overflowY: "auto" }}>
                 <Table variant="striped" colorScheme="teal" size="md">
@@ -196,7 +196,7 @@ function Report() {
                       <Th>Item Name</Th>
                       <Th>Item Locker</Th>
                       <Th>Quantity Pickup</Th>
-                      <Th>Ext.</Th>
+                      <Th>Exp.</Th>
                     </Tr>
                   </Thead>
                   <Tbody>

@@ -105,6 +105,7 @@ module.exports = {
     createQuery = `INSERT INTO quality2 VALUES (null, ${db.escape(date)},${db.escape(initial)}
     ,${db.escape(item_name)},${db.escape(item_locker)},${db.escape(quality)},
     ${db.escape(quality_pickup)}, ${db.escape(ket)});`
+    console.log(createQuery);
     db.query(createQuery, (err, result) => {
       if (err) {
         return response.status(400).send(err.message);

@@ -71,7 +71,7 @@ function Phone() {
       quality_pickup : Number(qualityData),
       ket : keteranganData
     }
-    let response = await axios.post("http://10.126.15.141:8002/qc/historian",myData)
+    let response = await axios.post("http://10.126.15.141:8002/qc/history",myData)
 
   }
 
