@@ -115,21 +115,20 @@ function Report() {
       "http://10.126.15.141:8002/qc/gethistorian",
       {
         params: {
-          start: "2023-10-20",
-          finish: " 2023-10-21",
+          start: getStartDate,
+          finish: getFinishDate,
         },
       }
     );
 
     setGetDataHistorical(response.data);
+    console.log(getDataHistorical);
   };
   const startDateHendeler = (e) => {
     setGetStartDate(e.target.value);
-    console.log(e.target.value);
   };
   const finishDateHendeler = (e) => {
     setGetFinishDate(e.target.value);
-    console.log(e.target.value);
   };
 
   return (
