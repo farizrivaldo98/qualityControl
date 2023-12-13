@@ -191,20 +191,24 @@ function Report() {
                   <Thead>
                     <Tr>
                       <Th>No</Th>
-                      <Th>Tanggal</Th>
-                      <Th>No Polisi</Th>
-                      <Th>RFID</Th>
-                      <Th>Status</Th>
+                      <Th>Date</Th>
+                      <Th>Initial</Th>
+                      <Th>Item Name</Th>
+                      <Th>Item Locker</Th>
+                      <Th>Quantity Pickup</Th>
+                      <Th>Ext.</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {data.map((item, index) => (
+                    {getDataHistorical.map((item, index) => (
                       <Tr key={index}>
-                        <Td>{item.no}</Td>
-                        <Td>{item.tanggal}</Td>
-                        <Td>{item.noPolisi}</Td>
-                        <Td>{item.rfid}</Td>
-                        <Td>{item.status}</Td>
+                        <Td>{item.id}</Td>
+                        <Td>{item.date}</Td>
+                        <Td>{item.initial}</Td>
+                        <Td>{item.item_name}</Td>
+                        <Td>{item.item_locker}</Td>
+                        <Td>{item.quality_pickup}</Td>
+                        <Td>{item.ket}</Td>
                       </Tr>
                     ))}
                   </Tbody>
