@@ -7,6 +7,8 @@ const db = mysql.createConnection({
   password: "s4k4f4rmA",
   database: "parammachine_saka",
   port: 3306,
+  reconnect: true,
+  acquireTimeout: 10000,
 });
 
 db.connect((err) => {

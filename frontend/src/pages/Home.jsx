@@ -113,7 +113,11 @@ function Home() {
       if (inputText == "") {
         return el;
       } else {
-        return el.item_name.includes(inputText);
+        return (
+          (el.item_name && el.item_name.includes(inputText)) ||
+          (el.no_catalog && el.no_catalog.includes(inputText)) ||
+          (el.brand && el.brand.includes(inputText))
+        );
       }
     });
     return ItemList.map((item, index) => (

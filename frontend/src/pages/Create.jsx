@@ -124,7 +124,7 @@ function Create() {
               <option value={25}>25</option>
             </Select>
             <Input
-              placeholder="Quality (just Number)"
+              placeholder="Quantity (just Number)"
               size="md"
               type="text"
               className="mb-3"

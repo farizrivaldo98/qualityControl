@@ -160,7 +160,11 @@ function Phone() {
       if (inputText === "") {
         return el;
       } else {
-        return el.item_name.includes(inputText);
+        return (
+          (el.item_name && el.item_name.includes(inputText)) ||
+          (el.no_catalog && el.no_catalog.includes(inputText)) ||
+          (el.brand && el.brand.includes(inputText))
+        );
       }
     });
     itemList.sort((a, b) => a.no_locker - b.no_locker);
