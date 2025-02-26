@@ -12,53 +12,39 @@ import {
   NumberDecrementStepper,
 } from "@chakra-ui/react";
 import CanvasJSReact from "../canvasjs.react";
+import { Chart } from "react-google-charts";
+var CanvasJS = CanvasJSReact.CanvasJS;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 function Create() {
-  const [inputItem, setInputItem] = useState("");
-  const [inputNoCatalog, setInputCatalog] = useState("");
-  const [inputBrandName, setInputBrandName] = useState("");
-  const [inputNoLocker, setInputNoLocker] = useState(0);
-  const [inputQuantity, setInputQuantity] = useState(0);
-  const [inputUnit, setInputUnit] = useState("");
-  const [inputKeterangan, setInputKeterangan] = useState("");
+  const [dailyPower, setDailyPower] = useState([]);
 
-  const itemHendeler = (e) => {
-    setInputItem(e.target.value.toUpperCase());
-  };
-  const noCatalogHendeler = (e) => {
-    setInputCatalog(e.target.value);
-  };
-  const inputBrandNameHendeler = (e) => {
-    setInputBrandName(e.target.value);
-  };
-  const noLockerHendeler = (e) => {
-    setInputNoLocker(e.target.value);
-  };
-  const qualityHendeler = (e) => {
-    setInputQuantity(e.target.value);
-  };
-  const unitHendeler = (e) => {
-    setInputUnit(e.target.value);
-  };
-  const keteranganHendeler = (e) => {
-    setInputKeterangan(e.target.value);
-  };
-
-  const addData = async () => {
-    let tempData = {
-      item_name: inputItem,
-      no_catalog: inputNoCatalog,
-      brand: inputBrandName,
-      qty: inputQuantity,
-      unit: inputUnit,
-      no_locker: inputNoLocker,
-      ket: inputKeterangan,
-    };
-    let response = await axios.post(
-      "http://10.126.15.141:8002/qc/create",
-      tempData
-    );
-    alert(response.request.statusText);
+  const options = {
+    theme: "light1",
+    title: {
+      text: "Daily Power",
+    },
+    subtitles: [
+      {
+        text: "kilo watt per hour",
+      },
+    ],
+    axisY: {
+      prefix: "",
+    },
+    toolTip: {
+      shared: true,
+    },
+    data: [
+      {
+        type: "splineArea",
+        name: "Kwh",
+        showInLegend: true,
+        xValueFormatString: "",
+        yValueFormatString: "",
+        dataPoints: dailyPower,
+      },
+    ],
   };
 
   return (
@@ -74,14 +60,12 @@ function Create() {
               size="md"
               type="text"
               className="mb-3"
-              onChange={itemHendeler}
             />
             <Input
               placeholder="No. Catalog"
               size="md"
               type="text"
               className="mb-3"
-              onChange={noCatalogHendeler}
             />
 
             <Input
@@ -89,14 +73,9 @@ function Create() {
               size="md"
               type="text"
               className="mb-3"
-              onChange={inputBrandNameHendeler}
             />
 
-            <Select
-              placeholder="Locker Number"
-              className="mb-3"
-              onChange={noLockerHendeler}
-            >
+            <Select placeholder="Locker Number" className="mb-3">
               <option value={1}>1</option>
               <option value={2}>2</option>
               <option value={3}>3</option>
@@ -128,30 +107,17 @@ function Create() {
               size="md"
               type="text"
               className="mb-3"
-              onChange={qualityHendeler}
             />
 
-            <Select placeholder="Unit" className="mb-3" onChange={unitHendeler}>
+            <Select placeholder="Unit" className="mb-3">
               <option value="Box">Box</option>
               <option value="Pcs">Pcs</option>
               <option value="Pack">Pack</option>
               <option value="Pasang">Pasang</option>
             </Select>
-            <Input
-              placeholder="Exp."
-              size="md"
-              type="text"
-              className="mb-3"
-              onChange={keteranganHendeler}
-            />
+            <Input placeholder="Exp." size="md" type="text" className="mb-3" />
 
-            <Button
-              colorScheme="teal"
-              variant="solid"
-              onClick={() => {
-                addData();
-              }}
-            >
+            <Button colorScheme="teal" variant="solid">
               Submit
             </Button>
           </Card>

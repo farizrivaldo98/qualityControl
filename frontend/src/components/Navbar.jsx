@@ -17,8 +17,6 @@ import AddToHomeScreenIcon from "@mui/icons-material/AddToHomeScreen";
 function Navbar() {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
-  const { toggleColorMode } = useColorMode();
-  const colorMode = useColorModeValue("light", "dark");
 
   const handleHover = (hovering) => {
     setIsHovered(hovering);
@@ -59,20 +57,6 @@ function Navbar() {
 
           <div className="flex-1">
             <ul className="pt-2 pb-4 space-y-1 text-sm">
-              <li className="rounded-sm ml-1">
-                <button
-                  onClick={toggleColorMode}
-                  className="flex items-center p-2 space-x-3 rounded-md"
-                >
-                  {colorMode === "light" ? (
-                    <MoonIcon className="w-6 h-6 text-gray-100" />
-                  ) : (
-                    <SunIcon className="w-6 h-6 text-gray-100" />
-                  )}
-                  {isHovered && <span className="text-gray-100">Mode</span>}
-                </button>
-              </li>
-
               <li className="rounded-sm">
                 <button
                   className="flex items-center p-2 space-x-3 rounded-md"
@@ -81,7 +65,9 @@ function Navbar() {
                   }}
                 >
                   <HomeIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && <span className="text-gray-100">Home</span>}
+                  {isHovered && (
+                    <span className="text-gray-100">Dashboard</span>
+                  )}
                 </button>
               </li>
 
@@ -95,18 +81,9 @@ function Navbar() {
                   className="flex items-center p-2 space-x-3 rounded-md"
                 >
                   <DescriptionIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && <span className="text-gray-100">Edit</span>}
-                </button>
-              </li>
-              <li className="rounded-sm">
-                <button
-                  onClick={() => {
-                    navigate(`/Phone`);
-                  }}
-                  className="flex items-center p-2 space-x-3 rounded-md"
-                >
-                  <AddToHomeScreenIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && <span className="text-gray-100">Phone</span>}
+                  {isHovered && (
+                    <span className="text-gray-100">Historical</span>
+                  )}
                 </button>
               </li>
 
@@ -118,19 +95,7 @@ function Navbar() {
                   className="flex items-center p-2 space-x-3 rounded-md"
                 >
                   <SettingsIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && <span className="text-gray-100">Create</span>}
-                </button>
-              </li>
-
-              <li className="rounded-sm">
-                <button
-                  onClick={() => {
-                    navigate(`/Report`);
-                  }}
-                  className="flex items-center p-2 space-x-3 rounded-md"
-                >
-                  <AdfScannerIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && <span className="text-gray-100">Report</span>}
+                  {isHovered && <span className="text-gray-100">Setting</span>}
                 </button>
               </li>
             </ul>
