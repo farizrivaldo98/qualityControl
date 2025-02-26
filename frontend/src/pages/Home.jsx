@@ -50,48 +50,56 @@ const Dashboard = () => {
   ];
 
   return (
-    <Box className="p-6 bg-gray-900 min-h-screen text-white">
-      <Heading textAlign="center" as="h1" size="xl" mb={6}>
-        MAIN DASHBOARD
-      </Heading>
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
-        {data.map((item, index) => (
-          <Box
-            key={index}
-            className="p-4 bg-gray-800 rounded-lg shadow-lg cursor-pointer"
-            onClick={item.onClick}
-          >
-            <Icon as={item.icon} className="text-4xl text-teal-400 mb-2" />
-            <Stat>
-              <StatLabel>{item.title}</StatLabel>
-              <StatNumber>{item.value}</StatNumber>
-              <StatHelpText className="text-green-400">
-                {item.cost}
-              </StatHelpText>
-            </Stat>
-          </Box>
-        ))}
-      </SimpleGrid>
-
-      {showPowerConsumption && (
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} className="mt-6">
-          {powerConsumption.map((item, index) => (
-            <Box key={index} className="p-4 bg-gray-800 rounded-lg shadow-lg">
+    <div>
+      <Box className="p-6  min-h-screen text-white">
+        <Heading
+          className="text-teal-600"
+          textAlign="center"
+          as="h1"
+          size="xl"
+          mb={6}
+        >
+          MAIN DASHBOARD
+        </Heading>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+          {data.map((item, index) => (
+            <Box
+              key={index}
+              className="p-4 bg-gray-800 rounded-lg shadow-lg cursor-pointer"
+              onClick={item.onClick}
+            >
               <Icon as={item.icon} className="text-4xl text-teal-400 mb-2" />
               <Stat>
                 <StatLabel>{item.title}</StatLabel>
                 <StatNumber>{item.value}</StatNumber>
-                {item.cost && (
-                  <StatHelpText className="text-green-400">
-                    {item.cost}
-                  </StatHelpText>
-                )}
+                <StatHelpText className="text-green-400">
+                  {item.cost}
+                </StatHelpText>
               </Stat>
             </Box>
           ))}
         </SimpleGrid>
-      )}
-    </Box>
+
+        {showPowerConsumption && (
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} className="mt-6">
+            {powerConsumption.map((item, index) => (
+              <Box key={index} className="p-4 bg-gray-800 rounded-lg shadow-lg">
+                <Icon as={item.icon} className="text-4xl text-teal-400 mb-2" />
+                <Stat>
+                  <StatLabel>{item.title}</StatLabel>
+                  <StatNumber>{item.value}</StatNumber>
+                  {item.cost && (
+                    <StatHelpText className="text-green-400">
+                      {item.cost}
+                    </StatHelpText>
+                  )}
+                </Stat>
+              </Box>
+            ))}
+          </SimpleGrid>
+        )}
+      </Box>
+    </div>
   );
 };
 

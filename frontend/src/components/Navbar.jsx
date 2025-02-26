@@ -1,108 +1,48 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  useColorMode,
-  useColorModeValue,
-  IconButton,
-} from "@chakra-ui/react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { IconButton } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import HomeIcon from "@mui/icons-material/Home";
-import CategoryIcon from "@mui/icons-material/Category";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import DescriptionIcon from "@mui/icons-material/Description";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AdfScannerIcon from "@mui/icons-material/AdfScanner";
-import AddToHomeScreenIcon from "@mui/icons-material/AddToHomeScreen";
+import { useColorMode } from "@chakra-ui/react";
+
 function Navbar() {
   const navigate = useNavigate();
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleHover = (hovering) => {
-    setIsHovered(hovering);
-  };
-
-  useEffect(() => {
-    const navbar = document.querySelector(".navbar");
-
-    navbar.addEventListener("mouseenter", () => {
-      handleHover(true);
-    });
-
-    navbar.addEventListener("mouseleave", () => {
-      handleHover(false);
-    });
-
-    return () => {
-      navbar.removeEventListener("mouseenter", () => {
-        handleHover(true);
-      });
-      navbar.removeEventListener("mouseleave", () => {
-        handleHover(false);
-      });
-    };
-  }, []);
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <div
-      className={`flex float-left pr-7 ${
-        isHovered ? "w-60" : "w-16 opacity-80 hover:opacity-100 mr-6"
-      } navbar`}
-    >
-      <div className="flex flex-col h-screen p-3 bg-gray-800 shadow w-60">
-        <div className="space-y-3">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold text-white">QC</h2>
-          </div>
+    <nav className="fixed top-0 left-0 w-full bg-gray-800 shadow-lg p-3 flex justify-between items-center">
+      {/* Logo */}
+      <div className="text-white text-xl font-bold px-4">RSUD</div>
 
-          <div className="flex-1">
-            <ul className="pt-2 pb-4 space-y-1 text-sm">
-              <li className="rounded-sm">
-                <button
-                  className="flex items-center p-2 space-x-3 rounded-md"
-                  onClick={() => {
-                    navigate(`/Home`);
-                  }}
-                >
-                  <HomeIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && (
-                    <span className="text-gray-100">Dashboard</span>
-                  )}
-                </button>
-              </li>
+      {/* Navigation Items */}
+      <div className="flex space-x-6">
+        <button
+          className="text-white flex items-center space-x-2 hover:text-gray-300"
+          onClick={() => navigate("/Home")}
+        >
+          <HomeIcon className="w-6 h-6" />
+          <span>Dashboard</span>
+        </button>
 
-              {/* Tambahkan ikon lainnya */}
-
-              <li className="rounded-sm">
-                <button
-                  onClick={() => {
-                    navigate(`/edit`);
-                  }}
-                  className="flex items-center p-2 space-x-3 rounded-md"
-                >
-                  <DescriptionIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && (
-                    <span className="text-gray-100">Historical</span>
-                  )}
-                </button>
-              </li>
-
-              <li className="rounded-sm">
-                <button
-                  onClick={() => {
-                    navigate(`/create`);
-                  }}
-                  className="flex items-center p-2 space-x-3 rounded-md"
-                >
-                  <SettingsIcon className="w-6 h-6 text-gray-100" />
-                  {isHovered && <span className="text-gray-100">Setting</span>}
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <button
+          className="text-white flex items-center space-x-2 hover:text-gray-300"
+          onClick={() => navigate("/create")}
+        >
+          <DescriptionIcon className="w-6 h-6" />
+          <span>Historical</span>
+        </button>
       </div>
-    </div>
+
+      {/* Theme Toggle */}
+      <IconButton
+        onClick={toggleColorMode}
+        icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+        isRound
+        className="text-white"
+      />
+    </nav>
   );
 }
 

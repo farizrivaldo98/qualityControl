@@ -10,7 +10,7 @@ function App() {
   return (
     <div>
       {!isPhoneRoute && (
-        <div>
+        <div className="mb-20">
           <Navbar />
         </div>
       )}

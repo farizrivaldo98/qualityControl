@@ -12,6 +12,23 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .App {
+    text-align: left;
+    width: 100%;
+  }
+
+  .App-header {
+    background-color: white !important;
+    color: black !important;
+    min-height: auto;
+    font-size: 12px; /* Sesuaikan ukuran font agar muat di kertas */
+  }
+}
 
 .App-header {
   background-color: #282c34;
