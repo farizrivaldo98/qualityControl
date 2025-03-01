@@ -1,4 +1,4 @@
-.App {
+/*.App {
   text-align: center;
 }
 
@@ -26,7 +26,7 @@
     background-color: white !important;
     color: black !important;
     min-height: auto;
-    font-size: 12px; /* Sesuaikan ukuran font agar muat di kertas */
+    font-size: 12px; 
   }
 }
 
@@ -53,3 +53,4 @@
     transform: rotate(360deg);
   }
 }
+*/
