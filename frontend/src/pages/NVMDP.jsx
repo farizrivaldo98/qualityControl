@@ -9,6 +9,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import axios from "axios";
 import   {Progress  } from "@chakra-ui/react";
 import ChartDashboard from "../components/ChartDashboard";
+import ReactSpeedometer from "react-d3-speedometer";
 
 
 const NVMDP = () => {
@@ -43,6 +44,21 @@ const NVMDP = () => {
     const [isDarkMode, setIsDarkMode] = useState(
         document.documentElement.getAttribute("data-theme") === "dark"
     );
+
+    const [frequency, setFrequency] = useState(50);
+    const [voltage, setVoltage] = useState(380);
+    const [current, setCurrent] = useState(75);
+
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setFrequency((Math.random() * (51 - 49) + 48).toFixed(2));
+        setVoltage((Math.random() * (390 - 380) + 360).toFixed(1));
+        setCurrent((Math.random() * 150).toFixed(1));
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }, []);
 
     const grafanaLVMDP = isDarkMode 
     ? "https://snapshots.raintank.io/dashboard/snapshot/uHORrfazbB1SNbhktJ03Du8ywyqoabrj?orgId=0&kiosk"
@@ -520,45 +536,155 @@ const NVMDP = () => {
         {/* Pop-Up */}
         {showSolarPanel && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
               <p className="text-text my-2">Ini adalah pop-up dari card Solar Panel 1 - 6.</p>
-              <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_Inverter1-6_SP_data" title="Inverter Solar Panel 1-6 Data Graph" colors={Colors1}
-                style={{
-                  border: 'none', // Removes border
-                  position: 'relative',
-                  width: '100%', // Full width of parent div
-                  aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                  height: '580px'
-                }}/>
+
               <button
                 onClick={() => setShowSolarPanel(false)}
                 className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
               >
                 X
               </button>
+              <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
             </div>
+  
           </div>
         )}
         {/* Pop-Up */}
         {showSolarPanel2 && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
               <p className="text-text my-2">Ini adalah pop-up dari card Solar Panel 7 - 12.</p>
-              <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_Inverter7-12_SP_data" title="Inverter Solar Panel 7-12 Data Graph" colors={Colors1}
-                style={{
-                  border: 'none', // Removes border
-                  position: 'relative',
-                  width: '100%', // Full width of parent div
-                  aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                  height: '580px'
-                }}/>
+
               <button
                 onClick={() => setShowSolarPanel2(false)}
                 className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
               >
                 X
               </button>
+              <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
             </div>
+            
           </div>
         )}
 {/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */}
@@ -616,22 +742,76 @@ const NVMDP = () => {
         {/* Pop-Up */}
         {showPopup && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
               <p className="text-text my-2">Ini adalah pop-up dari card LVMDP.</p>
-              <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_LVMDP1_data" title="LVMDP Data Graph" colors={Colors2}
-                style={{
-                  border: 'none', // Removes border
-                  position: 'relative',
-                  width: '100%', // Full width of parent div
-                  aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                  height: '580px'
-                }}/>
+
               <button
                 onClick={() => setShowPopup(false)}
                 className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
               >
                 X
               </button>
+              <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -670,22 +850,76 @@ const NVMDP = () => {
         {/* Pop-Up */}
         {showChillerPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-          <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+          <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
             <p className="text-text my-2">Ini adalah pop-up dari card Chiller.</p>
-            <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_PP.1-Chiller_data" title="Chiller Data Graph" colors={Colors2}
-              style={{
-                border: 'none', // Removes border
-                position: 'relative',
-                width: '100%', // Full width of parent div
-                aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                height: '580px'
-              }}/>
+
             <button
               onClick={() => setShowChillerPopup(false)}
               className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
             >
               X
             </button>
+            <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
           </div>
         </div>
         )}
@@ -725,22 +959,76 @@ const NVMDP = () => {
       {/* Pop-Up */}
       {showHydrantPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-          <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+          <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
             <p className="text-text my-2">Ini adalah pop-up dari card Hydrant.</p>
-            <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_PP.2-Hydrant_data" title="Hydrant Data Graph" colors={Colors1}
-              style={{
-                border: 'none', // Removes border
-                position: 'relative',
-                width: '100%', // Full width of parent div
-                aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                height: '580px'
-              }}/>
+\
             <button
               onClick={() => setShowHydrantPopup(false)}
               className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
             >
               X
             </button>
+            <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
           </div>
         </div>
         )}
@@ -779,22 +1067,75 @@ const NVMDP = () => {
         {/* Pop-Up */}
         {showUtil && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
               <p className="text-text my-2">Ini adalah pop-up dari card Utility.</p>
-              <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_SDP.1-Utility_data" title="Utility Data Graph" colors={Colors1}
-                style={{
-                  border: 'none', // Removes border
-                  position: 'relative',
-                  width: '100%', // Full width of parent div
-                  aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                  height: '580px'
-                }}/>
               <button
                 onClick={() => setShowUtil(false)}
                 className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
               >
                 X
               </button>
+              <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -832,22 +1173,75 @@ const NVMDP = () => {
         {/* Pop-Up */}
         {showProd && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
               <p className="text-text my-2">Ini adalah pop-up dari card SDP 1 Production.</p>
-              <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_SDP.1-Produksi_data" title="SDP 1 Production Data Graph" colors={Colors3}
-                style={{
-                  border: 'none', // Removes border
-                  position: 'relative',
-                  width: '100%', // Full width of parent div
-                  aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                  height: '580px'
-                }}/>
               <button
                 onClick={() => setShowProd(false)}
                 className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
               >
                 X
               </button>
+              <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -885,22 +1279,75 @@ const NVMDP = () => {
         {/* Pop-Up */}
         {showProd2 && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-full">
+            <div className="rounded-md border border-border shadow-buatcard bg-coba p-6 relative w-300">
               <p className="text-text mt-2">Ini adalah pop-up dari card SDP 2 Production.</p>
-              <ChartDashboard endpoint="http://10.126.15.137:8002/part/GrafanaPower" area="cMT-Gedung-UTY_SDP.2-Produksi_data" title="SDP 2 Production Data Graph" colors={Colors3}
-                style={{
-                  border: 'none', // Removes border
-                  position: 'relative',
-                  width: '100%', // Full width of parent div
-                  aspectRatio: '16 / 6', // Adjust aspect ratio as needed
-                  height: '580px'
-                }}/>
               <button
                 onClick={() => setShowProd2(false)}
                 className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full"
               >
                 X
               </button>
+              <div className="flex flex-wrap justify-center gap-20 p-5 text-white">
+                {/* Speedometer Frekuensi */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={48}
+                    maxValue={52}
+                    value={parseFloat(frequency)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className=" text-lg font-bold">Frekuensi (Hz)</div>
+                </div>
+
+                {/* Speedometer Voltage */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={360}
+                    maxValue={400}
+                    value={parseFloat(voltage)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Tegangan (V)</div>
+                </div>
+
+                {/* Speedometer Ampere */}
+                <div className="text-center" style={{ width: "320px" }}>
+                  <ReactSpeedometer
+                    width={320}
+                    height= {200}
+                    minValue={0}
+                    maxValue={150}
+                    value={parseFloat(current)}
+                    needleColor="steelblue"
+                    startColor="red"
+                    endColor="green"
+                    segments={5}
+                    ringWidth={30}
+                    needleHeightRatio={0.7}
+                    valueTextFontSize="18px"
+                    labelFontSize="10px"
+                  />
+                  <div className="mt-2 text-lg font-bold">Arus (A)</div>
+                </div>
+              </div>
             </div>
           </div>
         )}

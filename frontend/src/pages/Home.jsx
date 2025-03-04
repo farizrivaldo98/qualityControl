@@ -36,7 +36,8 @@ import PDAM from "./PDAM";
 import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CanvasJSReact from "../canvasjs.react";
+import CanvasJSReact from "../canvasjs.react";  
+import ReactSpeedometer from "react-d3-speedometer";
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -50,6 +51,21 @@ function Dashboard() {
   const [error, setError] = useState(null); // ini buat ngontrol pesan error
 
   const { isOpen, onOpen, onClose } = useDisclosure(); // Mengontrol pop-up
+
+
+
+
+  const getRandomValue = () => (Math.random() * (0.90 - 0.78) + 0.78).toFixed(2);
+
+  const [costPhi, setCostPhi] = useState(getRandomValue());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCostPhi(getRandomValue()); 
+    }, 1000);
+
+    return () => clearInterval(interval); 
+  }, []);
 
   //========================================AMPERE-------------------------------------------------------------
   const generateData = () => {
@@ -94,6 +110,7 @@ function Dashboard() {
   }, [counter]);
   const options = {
     theme: "dark1",
+    
     borderRadius: 12,
     axisY: {
       prefix: "",
@@ -901,78 +918,92 @@ function Dashboard() {
           </ModalContent>
         </Modal>
 
-        {/* Main Wrapper */}
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-3">
-          <div
-            className={`p-8 shadow-buatcard bg-coba rounded-lg dark:border-strokedark cursor-pointer transform transition duration-300 hover:scale-105 active:scale-65 ${
-              activeCard === "NVMDP" ? "ring-4 ring-blue-500" : ""
-            }`}
-            onClick={() => handleCardClick("NVMDP")}
+  <div
+    className={`p-8 shadow-buatcard bg-coba rounded-lg dark:border-strokedark cursor-pointer transform transition duration-300 hover:scale-105 active:scale-65 ${
+      activeCard === "NVMDP" ? "ring-4 ring-blue-500" : ""
+    }`}
+    onClick={() => handleCardClick("NVMDP")}
+  >
+    {/* Wrapper untuk MVMDP dan Speedometer */}
+    <div className="flex justify-between items-center">
+      {/* Bagian Kiri - Informasi */}
+      <div>
+        <h1 className="text-2xl text-text font-bold font-DMSans mb-0">
+          MVMDP
+        </h1>
+        <span className="inline-block text-text text-xl font-semibold">
+          {data.MVMDP ?? "Loading..."}
+        </span>
+        <span className="block text-gray-500">KWh</span>
+        <span className="block text-green-700 text-xl font-semibold">
+          {(data.MVMDP * dataTotalUang).toLocaleString("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          })}
+        </span>
+      </div>
+
+      {/* Bagian Kanan - Speedometer */}
+        <div className="w-[200x] h-[100px] mb-6">
+          <ReactSpeedometer
+            width={170}  // Lebarkan sedikit
+            height={140} // Tinggikan supaya tidak kepotong
+            textColor="white"         // Untuk label angka di sekitar speedometer
+            valueTextColor="white"    // Untuk angka di bawah jarum speedometer
+            labelFontColor="white"    // Untuk teks skala (0, 200, 400, dst.)
+            minValue={0}
+            maxValue={2}
+            currentValueText={`cos φ = ${costPhi}`} 
+            value={costPhi}
+            needleColor="steelblue"
+            startColor="red"
+            endColor="green"
+            segments={5} // 5 segmen warna
+            segmentColors={["#D65A5A", "#EFCB68", "#7AC74F", "#EFCB68", "#D65A5A"]} // Warna segmen
+            ringWidth={15}
+            needleHeightRatio={0.7}
+            valueTextFontSize="16px"
+            labelFontSize="10px"
+          />
+          
+        </div>
+        
+    </div>
+
+    {/* Progress Bar */}
+    <div className="space-y-1 pt-3">
+      <Progress
+        hasStripe
+        value={data.MVMDP}
+        max={getLimit.Limit_Listrik}
+        className="rounded-full"
+        sx={{
+          "& > div": { backgroundColor: "#F3E8FF" }, 
+          backgroundColor: isDarkMode ? "#282828" : "#ededed",
+        }}
+      />
+      <div className="flex justify-end">
+        <span className="flex items-center gap-1 text-[16px] pt-1 font-light text-gray-500">
+          {((data.MVMDP / getLimit.Limit_Listrik) * 100).toFixed(1)}%
+          <svg
+            className="fill-gray-500"
+            width="10"
+            height="11"
+            viewBox="0 0 10 11"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <div className="flex items-center mb-1">
-              <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-purple-600 bg-purple-100 rounded-full mr-6">
-                <svg
-                  aria-hidden="true"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="h-6 w-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-2xl text-text font-bold font-DMSans mb-0">
-                  MVMDP
-                </h1>
-                <span className="inline-block text-text text-xl font-semibold">
-                  {data.MVMDP ?? "Loading..."}
-                </span>
-                <span className="block text-gray-500">KWh</span>
-                <span className="block text-green-700 text-xl font-semibold">
-                  {(data.MVMDP * dataTotalUang).toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
-                </span>
-              </div>
-            </div>
-            <div className="space-y-1 pl-[88px]">
-              <Progress
-                hasStripe
-                value={data.MVMDP}
-                max={getLimit.Limit_Listrik}
-                className="rounded-full"
-                sx={{
-                  "& > div": { backgroundColor: "#F3E8FF" }, // Warna kustom untuk bar
-                  backgroundColor: isDarkMode ? "#282828" : "#ededed", // Warna kustom untuk track
-                }}
-              />
-              <div className="flex justify-end">
-                <span className="flex items-center gap-1 text-[16px] pt-1 font-light text-gray-500">
-                  {((data.MVMDP / getLimit.Limit_Listrik) * 100).toFixed(1)}%
-                  <svg
-                    className="fill-gray-500"
-                    width="10"
-                    height="11"
-                    viewBox="0 0 10 11"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4.35716 2.47737L0.908974 5.82987L5.0443e-07 4.94612L5 0.0848689L10 4.94612L9.09103 5.82987L5.64284 2.47737L5.64284 10.0849L4.35716 10.0849L4.35716 2.47737Z"
-                      fill=""
-                    />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </div>
+            <path
+              d="M4.35716 2.47737L0.908974 5.82987L5.0443e-07 4.94612L5 0.0848689L10 4.94612L9.09103 5.82987L5.64284 2.47737L5.64284 10.0849L4.35716 10.0849L4.35716 2.47737Z"
+              fill=""
+            />
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+
 
           <div
             className={`p-8 shadow-buatcard bg-coba rounded-lg dark:border-strokedark cursor-pointer transform transition duration-300 hover:scale-105 active:scale-65 ${
@@ -1226,6 +1257,7 @@ function Dashboard() {
                   <span className="block text-gray-500 ml-3 mt-1">A</span>
                 </div>
               </div>
+   
             </div>
             <div className="mt-6">
               <CanvasJSChart options={options} />
@@ -1267,6 +1299,7 @@ function Dashboard() {
             <div className="mt-6">
               <CanvasJSChart options={options1} />
             </div>
+
           </div>
 
           <div className="p-8 shadow-buatcard bg-coba rounded-lg dark:border-strokedark ">
