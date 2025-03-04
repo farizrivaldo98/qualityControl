@@ -21,7 +21,7 @@ function Navbar() {
       <div className="flex space-x-8">
         <button
           className="text-white flex items-center space-x-2 hover:text-gray-300 transition duration-300"
-          onClick={() => navigate("/Home")}
+          onClick={() => navigate("/")}
         >
           <HomeIcon className="w-5 h-5" />
           <span className="hidden sm:inline">Dashboard</span>
