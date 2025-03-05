@@ -51,7 +51,9 @@ function Dashboard() {
   const [error, setError] = useState(null); // ini buat ngontrol pesan error
 
   const { isOpen, onOpen, onClose } = useDisclosure(); // Mengontrol pop-up
-
+  const [isDarkMode, setIsDarkMode] = useState(
+    document.documentElement.getAttribute("data-theme") === "dark"
+  );
 
 
 
@@ -109,8 +111,8 @@ function Dashboard() {
     return () => clearInterval(interval);
   }, [counter]);
   const options = {
-    theme: "dark1",
-    
+    theme: isDarkMode ? "dark1" : "light2",
+    backgroundColor: isDarkMode ? "" : "#ffffff",
     borderRadius: 12,
     axisY: {
       prefix: "",
@@ -123,7 +125,7 @@ function Dashboard() {
         type: "spline",
         lineThickness: 5,
         name: "Ampere",
-        color: "#F3E8FF",
+        color:  "#d0a7fc" ,
         showInLegend: true,
         dataPoints: dailyPower,
       },
@@ -173,7 +175,8 @@ function Dashboard() {
     return () => clearInterval(interval);
   }, [counter1]);
   const options1 = {
-    theme: "dark1",
+    theme: isDarkMode ? "dark1" : "light2",
+    backgroundColor: isDarkMode ? "" : "#ffffff",
     borderRadius: 12,
     axisY: {
       prefix: "",
@@ -186,7 +189,7 @@ function Dashboard() {
         type: "spline",
         lineThickness: 5,
         name: "Ampere",
-        color: "#DCFCE7",
+        color: "#a6ffc4",
         showInLegend: true,
         dataPoints: dailyFQ,
       },
@@ -236,7 +239,8 @@ function Dashboard() {
     return () => clearInterval(interval);
   }, [counter1]);
   const options2 = {
-    theme: "dark1",
+    theme: isDarkMode ? "dark1" : "light2",
+    backgroundColor: isDarkMode ? "" : "#ffffff",
     borderRadius: 12,
     axisY: {
       prefix: "",
@@ -249,7 +253,7 @@ function Dashboard() {
         type: "spline",
         lineThickness: 5,
         name: "Ampere",
-        color: "#FEE2E2",
+        color: "#ffabab",
         showInLegend: true,
         dataPoints: dailyVolt,
       },
@@ -305,9 +309,7 @@ function Dashboard() {
     "rgba(var(--color-coba))"
   );
 
-  const [isDarkMode, setIsDarkMode] = useState(
-    document.documentElement.getAttribute("data-theme") === "dark"
-  );
+ 
 
   // Label buat Parameter dan teks properti lainnya
   const parameterConfigs = [
@@ -925,9 +927,12 @@ function Dashboard() {
     }`}
     onClick={() => handleCardClick("NVMDP")}
   >
+    
     {/* Wrapper untuk MVMDP dan Speedometer */}
+    
     <div className="flex justify-between items-center">
       {/* Bagian Kiri - Informasi */}
+      
       <div>
         <h1 className="text-2xl text-text font-bold font-DMSans mb-0">
           MVMDP
@@ -949,7 +954,7 @@ function Dashboard() {
           <ReactSpeedometer
             width={170}  // Lebarkan sedikit
             height={140} // Tinggikan supaya tidak kepotong
-            textColor="white"         // Untuk label angka di sekitar speedometer
+            textColor= "#b0aeae"       // Untuk label angka di sekitar speedometer
             valueTextColor="white"    // Untuk angka di bawah jarum speedometer
             labelFontColor="white"    // Untuk teks skala (0, 200, 400, dst.)
             minValue={0}
